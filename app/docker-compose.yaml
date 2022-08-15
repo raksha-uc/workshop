@@ -1,0 +1,37 @@
+version: "3.3"
+
+services:
+
+  postgres-service:
+    container_name: 'postgres-service'
+    image: postgres:11-alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: pollsapp
+    volumes:
+      - .:/docker-entrypoint-initdb.d
+    stdin_open: true
+
+    ports:
+      - "0.0.0.0:5431:5432"
+
+  webapp-service:
+    container_name: 'webapp-container'
+
+    build:
+      context: /home/mis/PycharmProjects/django-workshop/app
+      dockerfile: Dockerfile
+
+    environment:
+      username: postgres
+      password: postgres
+      host: postgres-service
+      port: 5432
+    depends_on:
+      - postgres-service
+    ports:
+      - "8012:8012"
+    command: sh -c "python3 SimplePoll/manage.py migrate 0:8012" && "python3 SimplePoll/manage.py  makemigrations 0:8012" && "python3 SimplePoll/manage.py runserver 0:8012"
+    stdin_open: true
