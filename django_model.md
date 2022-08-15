@@ -111,3 +111,7 @@ The save() method has no return value.
    ```
    e.delete()
    ```
+   You can also delete objects in bulk. Every QuerySet has a deleted() method, which deletes all members of that QuerySet.
+   ```
+   Question.objects.filter(pub_date='1999-10-02').delete()
+   ```
