@@ -15,7 +15,7 @@ services:
     stdin_open: true
 
     ports:
-      - "0.0.0.0:5431:5432"
+      - "5431:5432"
 
   webapp-service:
     container_name: 'webapp-container'
@@ -32,6 +32,6 @@ services:
     depends_on:
       - postgres-service
     ports:
-      - "8012:8012"
-    command: sh -c "python3 SimplePoll/manage.py migrate 0:8012" && "python3 SimplePoll/manage.py  makemigrations 0:8012" && "python3 SimplePoll/manage.py runserver 0:8012"
+      - "8001:8001"
+    command: sh -c "python3 SimplePoll/manage.py runserver 0:8001"
     stdin_open: true
